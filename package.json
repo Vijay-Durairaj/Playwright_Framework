@@ -1,0 +1,29 @@
+{
+  "name": "playwrightautomation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test && npm run allure:report",
+    "debug": "npx playwright test --debug",
+    "test:headed": "playwright test --headed && npm run allure:report",
+    "test:debug": "playwright test --debug",
+    "allure:report": "allure generate ./allure-results -o ./allure-report",
+    "allure:open": "allure open ./allure-report",
+    "test:allure": "npm test && npm run allure:open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inversify": "^6.0.2",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.0",
+    "allure": "^3.2.0",
+    "allure-playwright": "^3.5.0",
+    "typescript": "^5.4.0"
+  }
+}
