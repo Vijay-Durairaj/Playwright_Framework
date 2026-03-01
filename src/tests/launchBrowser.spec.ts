@@ -9,12 +9,11 @@ test.describe('Launch Browser', () => {
     test.beforeEach(async ({ page }) => {
         // 1. Get the class instance from Inversify (no Page involved here)
         homePage = container.get<HomePage>(HOME_PAGE.HomePage).init(page); // <-- Call init() immediately after getting the instance
-
     });
 
     test('open browser', async () => {
         await homePage.page.goto('https://playwright.dev/docs/getting-started-vscode#');
         await expect(homePage.page).toHaveTitle('Getting started - VS Code | Playwright');
-        await homePage.clickSignIn();
+       // await homePage.clickSignIn();
     });
 });

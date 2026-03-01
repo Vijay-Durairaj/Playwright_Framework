@@ -1,0 +1,11 @@
+{
+    urls: {}
+        login:"https://rahulshettyacademy.com/client",
+    },
+    loginData: []
+        validUser: {
+            username: "validvijaydurairaj@mail.com",
+            password: "P@ssword@1"
+        }
+    ]
+}
