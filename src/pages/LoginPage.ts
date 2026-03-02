@@ -1,20 +1,17 @@
-import 'reflect-metadata';
-
 import { Page } from '@playwright/test';
-import { injectable } from 'inversify';          // ← no @inject needed
+import { injectable } from 'inversify';
 import { LoginPageObj } from '@pageObjects/LoginPageObj';
 import { ILoginPage } from '@interfaces/LoginPage';
 
 @injectable()
 export class LoginPage implements ILoginPage {
-    
-    public page!: Page;
-    private loginPageObj!: LoginPageObj;
 
-     init(page: Page): this {
+    private page: Page;
+    private loginPageObj: LoginPageObj;
+
+    constructor(page: Page) {
         this.page = page;
         this.loginPageObj = new LoginPageObj(page);
-        return this
     }
 
     async login(username: string, password: string): Promise<void> {
@@ -24,7 +21,10 @@ export class LoginPage implements ILoginPage {
     }
 
     async isLoginSuccessful(): Promise<boolean> {
-        // Implement logic to check if login was successful, e.g., by checking for a specific element
         return await this.loginPageObj.getHomePageIndicator().isVisible();
+    }
+
+    async logout(): Promise<void> {
+        await this.loginPageObj.getLogoutButton().click();
     }
 }

@@ -22,4 +22,8 @@ export class LoginPageObj {
     getHomePageIndicator(): Locator {
         return this.page.getByRole('heading', { name: 'Automation' });
     }
+
+    getLogoutButton(): Locator {
+        return this.page.locator('button', {hasText:' Sign Out '});
+    }
 }

@@ -38,7 +38,8 @@ export class DataHelper {
             this.cache.set(fileName, data);
             return data;
         } catch (e) {
-            throw new Error(`[DataHelper] Failed to parse JSON in "${fileName}": ${e}`);
+            const errorMessage = e instanceof Error ? e.message : String(e);
+            throw new Error(`[DataHelper] Failed to parse JSON in "${fileName}": ${errorMessage}`);
         }
     }
 

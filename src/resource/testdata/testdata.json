@@ -1,13 +1,13 @@
 {
-    urls: {
-        login:"https://rahulshettyacademy.com/client",
-    },
-    loginData: []
-        validUser: {
-            testId: "TC001",
-            description: "Valid login credentials",
-            email: "validvijaydurairaj@mail.com",
-            password: "P@ssword@1"
-        }
-    ]
+  "urls": {
+    "login": "https://rahulshettyacademy.com/client"
+  },
+  "loginData": [
+    {
+      "testId": "TC001",
+      "description": "Valid login credentials",
+      "email": "vijaydurairaj@mail.com",
+      "password": "P@ssword@1"
+    }
+  ]
 }

@@ -11,7 +11,6 @@ export interface TestData {
     loginData: LoginTestData[];
     urls: {
         login:     string;
-        dashboard: string;
     };
 }
 
