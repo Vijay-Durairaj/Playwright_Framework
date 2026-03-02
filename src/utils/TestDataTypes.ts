@@ -1,10 +1,4 @@
-// src/interfaces/TestDataTypes.ts
-// ─────────────────────────────────────────────────────────────────────────────
-// ADD NEW INTERFACES HERE WHEN YOU ADD A NEW JSON FILE.
-// Never touch DataHelper.ts — only this file grows over time.
-// ─────────────────────────────────────────────────────────────────────────────
-
-// ── Login ─────────────────────────────────────────────────────────────────────
+// ── Test Data Types ───────────────────────────────────────────────────────────────
 export interface LoginTestData {
     testId:         string;
     description:    string;
@@ -44,5 +38,3 @@ export interface UserTestData {
 export interface UserData {
     users: UserTestData[];
 }
-
-// ── Add more below as your suite grows ────────────────────────────────────────

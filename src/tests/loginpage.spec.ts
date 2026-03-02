@@ -5,7 +5,6 @@ import { LOGIN_PAGE } from '@symbols/loginpage/LoginPage.symbol';
 import { DataHelper } from 'src/helper/DataHelper'; 
 import {
     TestData, LoginTestData,
-    ProductData, Product,
 } from '../utils/TestDataTypes'
 
 test.describe('Login Page', () => {
@@ -19,7 +18,7 @@ test.describe('Login Page', () => {
     });
 
     for (const loginData of loginRows) {
-        test('should display login form', async ({ page }) => {
+        test((`${loginData.testId}, ${loginData.description}`), async ({ page }) => {
             await page.goto(urls.login);
             await expect(page.locator('form')).toBeVisible();
             await loginPage.login(loginData.email, loginData.password); 

@@ -1,10 +1,12 @@
 {
-    urls: {}
+    urls: {
         login:"https://rahulshettyacademy.com/client",
     },
     loginData: []
         validUser: {
-            username: "validvijaydurairaj@mail.com",
+            testId: "TC001",
+            description: "Valid login credentials",
+            email: "validvijaydurairaj@mail.com",
             password: "P@ssword@1"
         }
     ]
