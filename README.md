@@ -144,39 +144,28 @@ From `package.json`:
 ## 🧪 Login Test Flow (Neat Visual)
 
 ```mermaid
-%%{init: {
-    "theme": "base",
-    "themeVariables": {
-        "primaryColor": "#E3F2FD",
-        "primaryTextColor": "#0D47A1",
-        "primaryBorderColor": "#64B5F6",
-        "lineColor": "#546E7A",
-        "secondaryColor": "#E8F5E9",
-        "tertiaryColor": "#FFF3E0"
-    }
-}}%%
 flowchart TD
-        A[🚀 Start: npm test] --> B[Playwright discovers src/tests/*.spec.ts]
-        B --> C[beforeEach creates LoginPage from DI factory]
-        C --> D[Read LoginPage.json]
-        D --> E[Iterate loginData rows]
-        E --> F[Navigate to login URL]
-        F --> G[Assert login form visible]
-        G --> H[Perform login(email, password)]
-        H --> I[Wait for network idle]
-        I --> J[Assert isLoginSuccessful == true]
-        J --> K[Logout]
-        K --> L[Generate Playwright + Allure results]
+    A[Start npm test] --> B[Discover spec files]
+    B --> C[Create LoginPage via DI factory]
+    C --> D[Read LoginPage json]
+    D --> E[Iterate loginData rows]
+    E --> F[Navigate to login URL]
+    F --> G[Assert form is visible]
+    G --> H[Perform login with email and password]
+    H --> I[Wait for network idle]
+    I --> J[Assert login successful]
+    J --> K[Logout]
+    K --> L[Generate Playwright and Allure results]
 
-        classDef start fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:1.5px;
-        classDef action fill:#E3F2FD,stroke:#1565C0,color:#0D47A1,stroke-width:1.2px;
-        classDef assert fill:#FFF3E0,stroke:#EF6C00,color:#E65100,stroke-width:1.2px;
-        classDef report fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C,stroke-width:1.2px;
+    classDef start fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:1.5px;
+    classDef action fill:#E3F2FD,stroke:#1565C0,color:#0D47A1,stroke-width:1.2px;
+    classDef assert fill:#FFF3E0,stroke:#EF6C00,color:#E65100,stroke-width:1.2px;
+    classDef report fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C,stroke-width:1.2px;
 
-        class A start;
-        class C,D,E,F,H,K action;
-        class G,I,J assert;
-        class L report;
+    class A start;
+    class C,D,E,F,H,K action;
+    class G,I,J assert;
+    class L report;
 ```
 
 ---
