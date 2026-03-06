@@ -1,0 +1,5 @@
+{
+    "Products": {
+        "allProducts": "api/ecom/product/get-all-products"
+    }
+}

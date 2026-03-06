@@ -7,9 +7,7 @@
       "password": "P@ssword@1"
     }
   ],
-  "urls": [
-    {
-      "login": "https://rahulshettyacademy.com/client"
+  "urls":  {
+      "login": "https://rahulshettyacademy.com/client/"
     }
-  ]
 }

@@ -7,7 +7,7 @@ import testData from '../resource/testdata/LoginPage.json';
 
 test.describe('Login Page', () => {
 
-    const homeUrl = testData.urls[0];
+    const homeUrl = testData.urls.login;
     const loginData = loginTs.loginData;
     let loginPage: LoginPage;
 
@@ -17,7 +17,7 @@ test.describe('Login Page', () => {
 
     loginData.forEach((testData) => {
         test((`${testData.testId}, ${testData.description}`), async ({ page }) => {
-            await page.goto(homeUrl.login);
+            await page.goto(homeUrl);
             await expect(page.locator('form')).toBeVisible();
             await loginPage.login(testData.email, testData.password);
             await page.waitForLoadState('networkidle');
