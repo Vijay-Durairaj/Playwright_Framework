@@ -18,3 +18,10 @@ export interface Data {
     productFor: string;
     productAddedBy: string;
 }
+
+export interface Endpoints {
+    apiEndpoint: string;
+    Products: {
+        allProducts: string;
+    };
+}
