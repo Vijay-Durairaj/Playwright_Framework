@@ -7,7 +7,6 @@ import testData from '../resource/testdata/LoginPage.json';
 
 test.describe('Product Listing Page', () => {
 
-    const getAllProducts = productpage?.Products?.allProducts;
     const loginData = testData.loginData[0];
 
     test('should display products correctly', async ({ page, getToken, loginAs }) => {
@@ -31,9 +30,8 @@ test.describe('Product Listing Page', () => {
         const productsResponsePromise = page.waitForResponse(
             (res) => res.url().includes(endpoints.Products.allProducts) && res.ok()
         );
-
+        
         await loginAs(loginData.email, loginData.password);
-        const token = await getToken(loginData.email, loginData.password);
         await productsResponsePromise;
 
         const allProducts = Array.isArray(productsResponseBody?.data)
