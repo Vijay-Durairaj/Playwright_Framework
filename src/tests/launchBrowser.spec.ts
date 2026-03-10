@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/base.fixture';
 import { HomePage } from '@pages/homepage';
-import { container } from '@symbols/homepage/homepage.inversify';
-import { HOME_PAGE } from '@symbols/homepage/Homepage.symbols';
+import { container } from '@containers/homepage/homepage.inversify';
+import { HOME_PAGE } from '@containers/homepage/Homepage.symbols';
 
 test.describe('Launch Browser', () => {
     let homePage: HomePage;

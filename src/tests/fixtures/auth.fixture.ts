@@ -1,6 +1,6 @@
-import { test as base, expect } from '@playwright/test';
-import { container, LoginPageFactory } from '@symbols/loginpage/LoginPage.inversify';
-import { LOGIN_PAGE } from '@symbols/loginpage/LoginPage.symbol';
+import { test as base, expect } from './base.fixture';
+import { container, LoginPageFactory } from '@containers/loginpage/LoginPage.inversify';
+import { LOGIN_PAGE } from '@containers/loginpage/LoginPage.symbol';
 import testData from '../../resource/testdata/LoginPage.json';
 
 type AuthFixtures = {

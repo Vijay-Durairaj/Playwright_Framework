@@ -1,4 +1,4 @@
-import { IProductListingPage } from "../interfaces/ProductListingPage";
+import { IProductListingPage } from "../interfaces/pages/ProductListingPage";
 import { Product } from "../models/ProductListingPage";
 import { Page } from '@playwright/test';
 

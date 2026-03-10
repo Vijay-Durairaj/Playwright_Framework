@@ -15,9 +15,9 @@
     "paths": { // Define path aliases for module resolution
       "@core/*": ["src/core/*"],
       "@interfaces/*": ["src/interfaces/*"],
-      "@symbols/*": ["src/containters/*"],
       "@services/*": ["src/services/*"],
       "@pages/*": ["src/pages/*"],
+      "@containers/*": ["src/containers/*"],
       "@pageObjects/*": ["src/pageObjects/*"],
       "@utils/*": ["src/utils/*"],
       "@config/*": ["src/config/*"]

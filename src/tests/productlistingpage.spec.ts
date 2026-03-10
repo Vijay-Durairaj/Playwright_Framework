@@ -1,8 +1,6 @@
 import { test, expect } from './fixtures/auth.fixture';
 import productpage from '../resource/api_testdata/productpage.json';
-import { ProductListingPage } from '@pages/productlistingpage';
-import product from '../resource/api_testdata/productpage.json';
-import { Endpoints } from 'src/models/ProductListingPage';
+import { Endpoints } from '../models/ProductListingPage';
 import testData from '../resource/testdata/LoginPage.json';
 
 test.describe('Product Listing Page', () => {

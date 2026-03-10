@@ -8,6 +8,8 @@
     "debug": "npx playwright test --debug",
     "test:headed": "playwright test --headed && npm run allure:report",
     "test:debug": "playwright test --debug",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "allure:report": "allure generate ./allure-results -o ./allure-report",
     "allure:open": "allure open ./allure-report",
     "test:allure": "npm test && npm run allure:open"
@@ -16,14 +18,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chromadb": "^3.3.1",
     "inversify": "^6.0.2",
+    "langchain": "^1.2.30",
+    "openai": "^6.27.0",
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "@types/node": "^25.3.0",
     "allure": "^3.2.0",
     "allure-playwright": "^3.5.0",
+    "eslint": "^9.35.0",
     "typescript": "^5.4.0"
   }
 }

@@ -1,14 +1,13 @@
 import { LoginPage } from '@pages/LoginPage';
-import { test, expect } from '@playwright/test';
-import { container, LoginPageFactory } from '@symbols/loginpage/LoginPage.inversify';
-import { LOGIN_PAGE } from '@symbols/loginpage/LoginPage.symbol';
-import loginTs from '../resource/testdata/LoginPage.json';
+import { test, expect } from './fixtures/base.fixture';
+import { container, LoginPageFactory } from '@containers/loginpage/LoginPage.inversify';
+import { LOGIN_PAGE } from '@containers/loginpage/LoginPage.symbol';
 import testData from '../resource/testdata/LoginPage.json';
 
 test.describe('Login Page', () => {
 
     const homeUrl = testData.urls.login;
-    const loginData = loginTs.loginData;
+    const loginData = testData.loginData;
     let loginPage: LoginPage;
 
     test.beforeEach(async ({ page }) => {

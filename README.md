@@ -1,243 +1,241 @@
 # Playwright Automation Framework
 
-Scalable UI automation framework using Playwright + TypeScript, with Inversify-based dependency injection and Allure reporting.
+Scalable test automation framework built with Playwright + TypeScript, using Inversify for dependency injection, fixture layering for reusable test setup, and AI-assisted self-healing for locator failures.
 
----
+## Highlights
 
-## ✨ Highlights
+- Layered framework: `tests` -> `pages` -> `pageObjects`.
+- Reusable custom fixtures (`base` and `auth`).
+- Inversify DI for page/service wiring.
+- Data-driven tests from JSON files.
+- API interception support for validating backend responses.
+- RAG-style AI locator suggestion on failed tests.
+- HTML and Allure reports.
+- ESLint rule enforcing consistent imports (no `src/...` absolute imports).
 
-- Page Object Model (POM) separation: `pages` for actions, `pageObjects` for locators.
-- Inversify DI for feature-level wiring (`homepage`, `loginpage`).
-- JSON-driven test data (`src/resource/testdata/LoginPage.json`).
-- Built-in HTML + Allure report generation.
+## Tech Stack
 
----
+- Playwright
+- TypeScript
+- Inversify
+- OpenAI SDK
+- LangChain and ChromaDB (available for RAG evolution)
+- Allure reporter
+- ESLint
 
-## 🧰 Tech Stack
-
-- Playwright `^1.58.2`
-- TypeScript `^5.4.0`
-- Inversify `^6.0.2`
-- allure-playwright `^3.5.0`
-- reflect-metadata `^0.2.2`
-
----
-
-## 📁 Current Project Structure
-
-> Note: folder name is currently `containters` in source and aliases (intentional here to match code).
+## Project Structure
 
 ```text
 Playwright_Framework/
 ├── src/
-│   ├── config/
-│   │   └── playwright.config.ts
-│   ├── containters/
+│   ├── containers/              # DI containers and symbols
+│   │   ├── ai/
 │   │   ├── homepage/
-│   │   │   ├── homepage.inversify.ts
-│   │   │   └── Homepage.symbols.ts
-│   │   └── loginpage/
-│   │       ├── LoginPage.inversify.ts
-│   │       └── LoginPage.symbol.ts
-│   ├── interfaces/
-│   │   ├── HomePage.ts
-│   │   └── LoginPage.ts
-│   ├── pageObjects/
-│   │   ├── HomePageobj.ts
-│   │   └── LoginPageObj.ts
-│   ├── pages/
-│   │   ├── homepage.ts
-│   │   └── LoginPage.ts
-│   ├── resource/
-│   │   └── testdata/
-│   │       └── LoginPage.json
-│   └── tests/
-│       ├── launchBrowser.spec.ts
-│       └── loginpage.spec.ts
-├── allure-results/
-├── allure-report/
-├── playwright-report/
+│   │   ├── loginpage/
+│   │   └── productlistingpage/
+│   ├── interfaces/              # Contracts for pages/services
+│   │   ├── ai/
+│   │   └── pages/
+│   ├── models/                  # Shared data models
+│   ├── pageObjects/             # Locator-only classes
+│   ├── pages/                   # Business/page actions
+│   ├── resource/                # Test data and API test data
+│   │   ├── testdata/
+│   │   └── api_testdata/
+│   ├── services/                # Concrete service implementations
+│   ├── tests/
+│   │   ├── fixtures/            # Shared fixture layers
+│   │   │   ├── base.fixture.ts
+│   │   │   └── auth.fixture.ts
+│   │   ├── launchBrowser.spec.ts
+│   │   ├── loginpage.spec.ts
+│   │   └── productlistingpage.spec.ts
+│   └── utils/
+├── ARCHITECTURE.md
 ├── playwright.config.ts
 ├── tsconfig.json
+├── eslint.config.cjs
 ├── package.json
 └── README.md
 ```
 
----
+## Framework Layers
 
-## 🏛️ Framework Design
+### 1. Test Layer (`src/tests`)
 
-### 1) Page Object Model (POM)
+- Contains spec files with assertions and test intent.
+- Specs import `test` from fixtures, not directly from Playwright.
 
-- `src/pageObjects/*`: locator-only classes (`getUsernameField()`, `getSubmitButton()`, etc.).
-- `src/pages/*`: user/business actions (`login`, `logout`, `clickSignIn`).
-- `src/tests/*`: test intent and assertions only.
+### 2. Fixture Layer (`src/tests/fixtures`)
 
-### 2) Dependency Injection (Inversify)
+- `base.fixture.ts`:
+  - Extends Playwright test.
+  - Adds auto self-healing behavior on test failures.
+  - Extracts failed locator from error logs.
+- `auth.fixture.ts`:
+  - Extends `base.fixture.ts`.
+  - Adds `loginAs()` and `getToken()` helpers.
 
-The framework currently uses two valid DI styles:
+### 3. Page Layer (`src/pages`)
 
-- **Homepage flow**: container returns class, then test calls `.init(page)`.
-- **Login flow**: container returns a **factory** `(page) => new LoginPage(page)`.
+- Holds user/business actions.
+- Uses page objects internally.
 
-This keeps Playwright `Page` lifecycle inside tests while still using DI for class wiring.
+### 4. Page Object Layer (`src/pageObjects`)
 
-### 3) Data-Driven Testing
+- Centralizes selectors and locator builders.
+- Keeps selector maintenance isolated from test flow logic.
 
-- Login suite reads test data from `src/resource/testdata/LoginPage.json`.
-- Each entry in `loginData` becomes a test case with dynamic title:
-    `TC001, Valid login credentials`
+### 5. DI Layer (`src/containers`)
 
----
+- Inversify containers bind interfaces/symbols to implementations.
+- Provides test-friendly construction patterns, including page factories.
 
-## 📦 Setup
+### 6. Service Layer (`src/services`)
 
-### Prerequisites
+- `LocatorHealer` implements AI-assisted locator suggestion.
+- Uses retrieval + generation approach for failure analysis.
 
-- Node.js 18+ recommended
+## End-to-End Framework Flow
+
+```mermaid
+flowchart TD
+    A[npm test] --> B[Playwright loads config]
+    B --> C[Discover specs in src/tests]
+    C --> D[Spec imports fixture test object]
+    D --> E[Fixture setup runs]
+    E --> F[Resolve pages/services from DI containers]
+    F --> G[Execute page actions]
+    G --> H[Run assertions]
+    H --> I{Test failed?}
+    I -- No --> J[Write HTML and Allure results]
+    I -- Yes --> K[Base fixture self-heal hook]
+    K --> L[Capture DOM + extract failed locator]
+    L --> M[LocatorHealer suggests better locator]
+    M --> J
+```
+
+## Self-Healing (RAG-Style) Flow
+
+```mermaid
+flowchart TD
+    A[Test failure] --> B[Get error message from testInfo]
+    B --> C[Parse failed locator pattern]
+    C --> D[Capture page DOM]
+    D --> E[Chunk DOM]
+    E --> F[Generate embeddings for chunks]
+    F --> G[Embed failed locator query]
+    G --> H[Cosine similarity retrieval top-k chunks]
+    H --> I[Build prompt with retrieved context]
+    I --> J[OpenAI completion returns locator]
+    J --> K[Log suggested locator for debugging/fix]
+```
+
+## Onboarding Flow (Login + Product Listing)
+
+```mermaid
+flowchart LR
+    subgraph LoginSuite[Login Suite Path]
+        L1[loginpage.spec.ts starts] --> L2[beforeEach resolves LoginPage via DI]
+        L2 --> L3[Navigate to login URL from test data]
+        L3 --> L4[Perform login action]
+        L4 --> L5[Assert login success and logout]
+    end
+
+    subgraph ProductSuite[Product Listing Suite Path]
+        P1[productlistingpage.spec.ts starts] --> P2[Register product API route]
+        P2 --> P3[Set waitForResponse predicate]
+        P3 --> P4[Use auth fixture loginAs]
+        P4 --> P5[Capture API JSON from intercepted response]
+        P5 --> P6[Assert products list length > 0]
+    end
+
+    L5 --> X[Playwright report + Allure result]
+    P6 --> X
+```
+
+## API Interception Pattern
+
+Used in product listing tests:
+
+- Register route before triggering action.
+- Capture response body from route fetch.
+- Wait for matching response with `page.waitForResponse`.
+- Assert on parsed response (`data` list, count, fields).
+
+This pattern avoids race conditions and ensures deterministic API assertions.
+
+## Configuration
+
+### Playwright
+
+- Test directory: `./src/tests`
+- Browser project: Chromium
+- Workers: `1`
+- Parallel mode: disabled
+- Trace: `retain-on-failure`
+- Reporters: HTML and Allure
+
+### TypeScript Aliases
+
+- `@containers/*` -> `src/containers/*`
+- `@pages/*` -> `src/pages/*`
+- `@pageObjects/*` -> `src/pageObjects/*`
+- `@interfaces/*` -> `src/interfaces/*`
+- `@services/*` -> `src/services/*`
+- `@utils/*` -> `src/utils/*`
+
+### Lint Rule For Import Consistency
+
+ESLint blocks `src/...` absolute imports via `no-restricted-imports`.
+
+Use either:
+
+- Alias imports (`@containers/...`, `@pages/...`) or
+- Relative imports (`../...`)
+
+## Setup
+
+Prerequisites:
+
+- Node.js 18+
 - npm
 
-### Installation
+Install:
 
 ```bash
 npm install
 npx playwright install
 ```
 
----
+## Run Commands
 
-## ▶️ Run Commands
+- `npm test`: Run tests and generate Allure report.
+- `npm run test:headed`: Run headed tests and generate Allure report.
+- `npm run debug` or `npm run test:debug`: Run in debug mode.
+- `npm run lint`: Run ESLint checks.
+- `npm run lint:fix`: Auto-fix lint issues where possible.
+- `npm run allure:report`: Generate Allure report from results.
+- `npm run allure:open`: Open generated Allure report.
+- `npm run test:allure`: Run tests, generate report, and open report.
 
-From `package.json`:
+## Environment Variables
 
-- `npm test` → run tests + generate Allure report
-- `npm run test:headed` → headed run + generate Allure report
-- `npm run debug` or `npm run test:debug` → debug mode
-- `npm run allure:report` → generate report from `allure-results`
-- `npm run allure:open` → open generated Allure report
-- `npm run test:allure` → run + generate + open Allure
+Create `.env` at repo root with:
 
----
-
-## ⚙️ Configuration Snapshot
-
-### Playwright (`playwright.config.ts`)
-
-- `testDir: './src/tests'`
-- `workers: 1`
-- `fullyParallel: false`
-- `headless: false`
-- `trace: 'retain-on-failure'`
-- reporters: `html`, `allure-playwright`
-- project: `chromium`
-
-### TypeScript Aliases (`tsconfig.json`)
-
-- `@pages/*` → `src/pages/*`
-- `@pageObjects/*` → `src/pageObjects/*`
-- `@interfaces/*` → `src/interfaces/*`
-- `@symbols/*` → `src/containters/*`
-- `@config/*` → `src/config/*`
-
----
-
-## 🧪 Login Test Flow (Neat Visual)
-
-```mermaid
-flowchart TD
-    A[Start npm test] --> B[Discover spec files]
-    B --> C[Create LoginPage via DI factory]
-    C --> D[Read LoginPage json]
-    D --> E[Iterate loginData rows]
-    E --> F[Navigate to login URL]
-    F --> G[Assert form is visible]
-    G --> H[Perform login with email and password]
-    H --> I[Wait for network idle]
-    I --> J[Assert login successful]
-    J --> K[Logout]
-    K --> L[Generate Playwright and Allure results]
-
-    classDef start fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:1.5px;
-    classDef action fill:#E3F2FD,stroke:#1565C0,color:#0D47A1,stroke-width:1.2px;
-    classDef assert fill:#FFF3E0,stroke:#EF6C00,color:#E65100,stroke-width:1.2px;
-    classDef report fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C,stroke-width:1.2px;
-
-    class A start;
-    class C,D,E,F,H,K action;
-    class G,I,J assert;
-    class L report;
+```env
+OPENAI_API_KEY=your_openai_api_key
 ```
 
----
+Use plain `KEY=value` format for `.env` files.
 
-## 🔄 Step-by-Step Execution Flow
+## Additional Documentation
 
-1. `npm test` runs `npx playwright test`.
-2. Playwright loads config and starts Chromium.
-3. Test data is loaded from `LoginPage.json`.
-4. `beforeEach` resolves page classes from Inversify containers.
-5. Tests execute page actions through `pages/*` methods.
-6. Assertions validate outcomes.
-7. Results are written to `playwright-report/` and `allure-results/`.
-8. Allure HTML report is generated to `allure-report/`.
+- `ARCHITECTURE.md` contains concise architecture responsibilities and conventions.
 
----
-
-## 📊 Test Data Format
-
-Current JSON format used by login tests:
-
-```json
-{
-    "loginData": [
-        {
-            "testId": "TC001",
-            "description": "Valid login credentials",
-            "email": "vijaydurairaj@mail.com",
-            "password": "P@ssword@1"
-        }
-    ],
-    "urls": [
-        {
-            "login": "https://rahulshettyacademy.com/client"
-        }
-    ]
-}
-```
-
----
-
-## 🛠️ Troubleshooting
-
-### Alias / import issues
-
-- Ensure the import uses existing aliases from `tsconfig.json`.
-- Current alias for container symbols is `@symbols/* -> src/containters/*`.
-
-### Playwright browser issues
-
-```bash
-npx playwright install
-```
-
-### Allure report issues
-
-```bash
-npm run allure:report
-npm run allure:open
-```
-
----
-
-## 📚 References
+## References
 
 - https://playwright.dev/
 - https://www.typescriptlang.org/docs/
 - https://inversify.io/
 - https://allurereport.org/
-
----
-
-## 🗓️ Last Updated
-
-March 2, 2026

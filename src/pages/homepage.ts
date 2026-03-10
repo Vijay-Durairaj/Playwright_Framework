@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import { Page } from '@playwright/test';
 import { injectable } from 'inversify';          // ← no @inject needed
 import { HomePageObj } from '@pageObjects/HomePageobj';
-import { IHomePage } from '@interfaces/HomePage';
+import { IHomePage } from '@interfaces/pages/HomePage';
 
 @injectable()
 export class HomePage implements IHomePage {

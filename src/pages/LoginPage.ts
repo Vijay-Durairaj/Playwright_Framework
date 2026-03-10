@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { injectable } from 'inversify';
 import { LoginPageObj } from '@pageObjects/LoginPageObj';
-import { ILoginPage } from '@interfaces/LoginPage';
+import { ILoginPage } from '@interfaces/pages/LoginPage';
 
 @injectable()
 export class LoginPage implements ILoginPage {
