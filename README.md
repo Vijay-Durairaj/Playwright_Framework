@@ -50,7 +50,7 @@ Playwright_Framework/
 
 ```mermaid
 flowchart TD
-        A[Run npm test / playwright test] --> B[Load playwright.config.ts]
+    A[Run npm test or playwright test] --> B[Load playwright config]
         B --> C[Initialize project: chromium]
         C --> D[Discover tests in src/tests]
 
@@ -58,7 +58,7 @@ flowchart TD
         E -->|base.fixture| F[Create Playwright test context]
         E -->|auth.fixture| G[Create base fixture then extend with auth helpers]
 
-        F --> H[beforeEach in spec resolves page classes from container]
+        F --> H[Before each resolve page classes from container]
         G --> H
 
         H --> I[Execute test steps]
@@ -69,11 +69,11 @@ flowchart TD
         L --> M{Failed?}
         M -->|No| N[Store results: HTML + Allure]
         M -->|Yes| O[base.fixture auto hook: selfHealOnFailure]
-        O --> P[Read error from testInfo.errors]
+        O --> P[Read error from test info]
         P --> Q[Extract failed locator pattern]
-        Q --> R[Collect DOM using getDOM(page)]
-        R --> S[LocatorHealer.suggestLocator(dom, failedLocator)]
-        S --> T[Index/chunk DOM and retrieve relevant chunks]
+        Q --> R[Collect DOM from page]
+        R --> S[Call locator healer suggest locator]
+        S --> T[Index and retrieve relevant DOM chunks]
         T --> U[OpenAI completion returns suggested locator]
         U --> V[Log failed and suggested locator]
         V --> N
@@ -157,7 +157,7 @@ flowchart LR
         B --> C[For each JSON login dataset]
         C --> D[Go to login URL]
         D --> E[Assert login form visible]
-        E --> F[Call loginPage.login(email, password)]
+    E --> F[Call login method with email and password]
         F --> G[Wait for networkidle]
         G --> H[Assert login success]
         H --> I[Call logout]
@@ -168,8 +168,8 @@ flowchart LR
 ```mermaid
 flowchart LR
         A[productlistingpage.spec.ts starts] --> B[Build endpoint pattern from api_testdata]
-        B --> C[Register page.route to intercept products API]
-        C --> D[Start waitForResponse predicate]
+    B --> C[Register route to intercept products API]
+    C --> D[Start response wait predicate]
         D --> E[Call auth fixture loginAs]
         E --> F[Capture products response JSON in route handler]
         F --> G[Await products response promise]
